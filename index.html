@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAM - Premium Products</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            color: #333;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            padding: 15px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab.active {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .product-limit {
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: #ccc !important;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .account-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .balance-display {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tasks-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .task-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .task-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .task-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .task-reward {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .task-btn {
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .task-btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .task-btn.completed {
+            background: #28a745;
+            cursor: not-allowed;
+        }
+
+        .telegram-channel {
+            background: linear-gradient(45deg, #0088cc, #005fa3);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .telegram-channel a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .telegram-channel a:hover {
+            text-decoration: underline;
+        }
+
+        .referral-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+
+        .referral-section h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .referral-section input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .referral-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .referral-buttons button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .share-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        @media (max-width: 430px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                gap: 5px;
+            }
+            
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+
+            .products-grid {
+                gap: 10px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 ZAM</h1>
+            <p>Premium Products & Rewards Platform</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('products')">🛍️ Products</button>
+            <button class="nav-tab" onclick="showTab('account')">👤 Account</button>
+        </div>
+
+        <div id="products" class="tab-content active">
+            <div class="products-grid">
+                <div class="product-card" onclick="buyProduct('Premium Hat', 0.35)">
+                    <div class="product-icon">🧢</div>
+                    <div class="product-title">Premium Hat</div>
+                    <div class="product-price">0.35 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Premium Hat">1500</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Notebook', 0.3)">
+                    <div class="product-icon">📚</div>
+                    <div class="product-title">Notebook</div>
+                    <div class="product-price">0.3 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Notebook">2000</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Premium Pen', 0.32)">
+                    <div class="product-icon">✏️</div>
+                    <div class="product-title">Premium Pen</div>
+                    <div class="product-price">0.32 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Premium Pen">1200</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Photo Pack', 0.38)">
+                    <div class="product-icon">📷</div>
+                    <div class="product-title">Photo Pack</div>
+                    <div class="product-price">0.38 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Photo Pack">800</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Target Theme', 0.45)">
+                    <div class="product-icon">🎯</div>
+                    <div class="product-title">Target Theme</div>
+                    <div class="product-price">0.45 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Target Theme">600</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Sports Pack', 0.4)">
+                    <div class="product-icon">⚽</div>
+                    <div class="product-title">Sports Pack</div>
+                    <div class="product-price">0.4 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Sports Pack">900</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Wireless Headphones', 0.65)">
+                    <div class="product-icon">🎧</div>
+                    <div class="product-title">Wireless Headphones</div>
+                    <div class="product-price">0.65 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Wireless Headphones">300</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Phone Case', 0.42)">
+                    <div class="product-icon">📱</div>
+                    <div class="product-title">Phone Case</div>
+                    <div class="product-price">0.42 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Phone Case">1100</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Smart Watch', 0.85)">
+                    <div class="product-icon">⌚</div>
+                    <div class="product-title">Smart Watch</div>
+                    <div class="product-price">0.85 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Smart Watch">200</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Travel Backpack', 0.55)">
+                    <div class="product-icon">🎒</div>
+                    <div class="product-title">Travel Backpack</div>
+                    <div class="product-price">0.55 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Travel Backpack">400</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Gaming Controller', 0.48)">
+                    <div class="product-icon">🎮</div>
+                    <div class="product-title">Gaming Controller</div>
+                    <div class="product-price">0.48 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Gaming Controller">500</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+
+                <div class="product-card" onclick="buyProduct('Laptop Stand', 0.38)">
+                    <div class="product-icon">💻</div>
+                    <div class="product-title">Laptop Stand</div>
+                    <div class="product-price">0.38 TON</div>
+                    <div class="product-limit">Stock: <span class="stock-count" data-product="Laptop Stand">350</span></div>
+                    <button class="buy-btn">Buy with TON</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="account" class="tab-content">
+            <div class="account-section">
+                <div class="balance-display">
+                    <div class="balance-amount" id="userBalance">0</div>
+                    <div>Balance Points</div>
+                </div>
+
+                <div class="telegram-channel">
+                    <h3>📢 Join Our Telegram Channel</h3>
+                    <a href="https://t.me/mtvip999" target="_blank">@mtvip999</a>
+                    <p>Stay updated with latest products and exclusive offers!</p>
+                </div>
+
+                <h3 style="margin-bottom: 20px; text-align: center;">🎯 Complete Tasks to Earn Points</h3>
+                
+                <div class="referral-section">
+                    <h3>🔗 Referral Link</h3>
+                    <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                        <input type="text" id="referralLink" readonly>
+                        <div class="referral-buttons">
+                            <button class="copy-btn" onclick="copyReferralLink()">📋 Copy</button>
+                            <button class="share-btn" onclick="shareReferralLink()">📤 Share</button>
+                        </div>
+                    </div>
+                    <div style="text-align: center; color: #666;">
+                        <p>Referrals: <span id="referralCount" style="font-weight: bold; color: #007bff;">0</span>/50</p>
+                        <p style="font-size: 0.9rem;">Earn 1 point for each referral!</p>
+                    </div>
+                </div>
+                
+                <div class="tasks-grid">
+                    <div class="task-card" data-task="youtube">
+                        <div class="task-info">
+                            <h3>📺 Subscribe YouTube Channel</h3>
+                            <div class="task-reward">+50 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('youtube', 50, 'https://youtube.com/', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="telegram">
+                        <div class="task-info">
+                            <h3>📱 Follow Telegram Channel</h3>
+                            <div class="task-reward">+30 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('telegram', 30, 'https://t.me/mtvip999', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="bot">
+                        <div class="task-info">
+                            <h3>🤖 Open Telegram Bot</h3>
+                            <div class="task-reward">+25 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('bot', 25, 'https://t.me/your_bot', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="invite">
+                        <div class="task-info">
+                            <h3>👥 Invite 3 Friends</h3>
+                            <div class="task-reward">+100 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('invite', 100, 'https://t.me/mtvip999', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="community">
+                        <div class="task-info">
+                            <h3>💬 Join Community Group</h3>
+                            <div class="task-reward">+40 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('community', 40, 'https://t.me/mtvip999', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="rate">
+                        <div class="task-info">
+                            <h3>⭐ Rate Our App</h3>
+                            <div class="task-reward">+35 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('rate', 35, 'https://play.google.com/', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="instagram">
+                        <div class="task-info">
+                            <h3>📸 Follow Instagram</h3>
+                            <div class="task-reward">+45 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('instagram', 45, 'https://instagram.com/', this)">Open</button>
+                    </div>
+
+                    <div class="task-card" data-task="twitter">
+                        <div class="task-info">
+                            <h3>🐦 Follow Twitter/X</h3>
+                            <div class="task-reward">+40 Points</div>
+                        </div>
+                        <button class="task-btn" onclick="completeTask('twitter', 40, 'https://x.com/', this)">Open</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TON Wallet Address
+        const TON_ADDRESS = 'UQCC9TTHlJZLNH09baIi3UONk69UR-8YbedySf7F9sF-UJJl';
+        
+        // User data storage
+        let userData = {
+            balance: 0,
+            completedTasks: [],
+            ip: null,
+            referralCode: null,
+            referralCount: 0,
+            referrals: []
+        };
+
+        // Product stock tracking with updated prices
+        let productStock = {
+            'Premium Hat': 1500,
+            'Notebook': 2000,
+            'Premium Pen': 1200,
+            'Photo Pack': 800,
+            'Target Theme': 600,
+            'Sports Pack': 900,
+            'Wireless Headphones': 300,
+            'Phone Case': 1100,
+            'Smart Watch': 200,
+            'Travel Backpack': 400,
+            'Gaming Controller': 500,
+            'Laptop Stand': 350
+        };
+
+        // Device detection function
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Initialize the app
+        function initializeApp() {
+            // Try to get user IP
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    userData.ip = data.ip;
+                    loadUserData();
+                    updateProductDisplay();
+                    updateTaskButtons();
+                })
+                .catch(error => {
+                    console.log('IP detection failed');
+                    userData.ip = 'unknown_' + Math.random().toString(36).substr(2, 9);
+                    loadUserData();
+                    updateProductDisplay();
+                    updateTaskButtons();
+                });
+            
+            checkReferral();
+        }
+
+        // Load user data
+        function loadUserData() {
+            const savedData = JSON.parse(localStorage.getItem(`user_${userData.ip}`) || '{}');
+            const savedStock = JSON.parse(localStorage.getItem('productStock') || '{}');
+            
+            userData = {...userData, ...savedData};
+            productStock = {...productStock, ...savedStock};
+            
+            // Generate referral code if not exists
+            if (!userData.referralCode) {
+                userData.referralCode = generateReferralCode();
+                saveUserData();
+            }
+            
+            updateBalanceDisplay();
+            updateReferralDisplay();
+        }
+
+        // Save user data
+        function saveUserData() {
+            localStorage.setItem(`user_${userData.ip}`, JSON.stringify(userData));
+            localStorage.setItem('productStock', JSON.stringify(productStock));
+        }
+
+        // Update balance display
+        function updateBalanceDisplay() {
+            document.getElementById('userBalance').textContent = userData.balance;
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // Buy product with TON - Updated to redirect properly
+        function buyProduct(productName, price) {
+            // Check stock
+            if (productStock[productName] <= 0) {
+                alert('❌ Sorry! This product is out of stock.');
+                updateProductDisplay();
+                return;
+            }
+            
+            // Create TON payment URLs
+            const tonAmount = Math.round(price * 1000000000);
+            const message = encodeURIComponent(`Purchase: ${productName}`);
+            
+            let tonUrl;
+            if (isMobileDevice()) {
+                // For mobile devices - try to open TON app
+                tonUrl = `ton://transfer/${TON_ADDRESS}?amount=${tonAmount}&text=${message}`;
+            } else {
+                // For desktop - redirect to TON website
+                tonUrl = `https://wallet.ton.org/send?to=${TON_ADDRESS}&amount=${tonAmount}&text=${message}`;
+            }
+            
+            // Open TON wallet/website
+            window.open(tonUrl, '_blank');
+            
+            // Decrease stock immediately (simulating purchase)
+            productStock[productName]--;
+            saveUserData();
+            updateProductDisplay();
+            
+            alert('🎉 Redirected to TON payment! Complete the payment to receive your product.');
+        }
+
+        // Complete task - Updated to add points immediately without confirmation
+        function completeTask(taskId, points, taskUrl, buttonElement) {
+            if (userData.completedTasks.includes(taskId)) {
+                alert('Task already completed!');
+                return;
+            }
+
+            // Open task link
+            window.open(taskUrl, '_blank');
+
+            // Add points immediately
+            userData.balance += points;
+            userData.completedTasks.push(taskId);
+            
+            // Update button
+            buttonElement.textContent = 'Completed';
+            buttonElement.classList.add('completed');
+            buttonElement.disabled = true;
+            
+            updateBalanceDisplay();
+            saveUserData();
+            
+            alert(`🎉 Task completed! +${points} points added to your balance.`);
+        }
+
+        // Update task buttons based on completed tasks
+        function updateTaskButtons() {
+            document.querySelectorAll('.task-card').forEach(card => {
+                const taskElement = card.getAttribute('data-task');
+                const button = card.querySelector('.task-btn');
+                
+                if (userData.completedTasks.includes(taskElement)) {
+                    button.textContent = 'Completed';
+                    button.classList.add('completed');
+                    button.disabled = true;
+                }
+            });
+        }
+
+        // Generate referral code
+        function generateReferralCode() {
+            return 'ZAM' + Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+
+        // Update referral display
+        function updateReferralDisplay() {
+            const referralLink = `${window.location.origin}${window.location.pathname}?ref=${userData.referralCode}`;
+            document.getElementById('referralLink').value = referralLink;
+            document.getElementById('referralCount').textContent = userData.referralCount;
+        }
+
+        // Copy referral link
+        function copyReferralLink() {
+            const referralInput = document.getElementById('referralLink');
+            referralInput.select();
+            referralInput.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            alert('📋 Referral link copied to clipboard!');
+        }
+
+        // Share referral link
+        function shareReferralLink() {
+            const referralLink = document.getElementById('referralLink').value;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join ZAM - Premium Products Platform',
+                    text: 'Join me on ZAM and get amazing products with TON!',
+                    url: referralLink
+                });
+            } else {
+                copyReferralLink();
+            }
+        }
+
+        // Update product stock display
+        function updateProductDisplay() {
+            document.querySelectorAll('.stock-count').forEach(span => {
+                const productName = span.getAttribute('data-product');
+                span.textContent = productStock[productName];
+                
+                // Disable buy button if out of stock
+                const card = span.closest('.product-card');
+                const buyBtn = card.querySelector('.buy-btn');
+                if (productStock[productName] <= 0) {
+                    buyBtn.textContent = 'Out of Stock';
+                    buyBtn.disabled = true;
+                    buyBtn.style.background = '#ccc';
+                    card.style.cursor = 'not-allowed';
+                } else {
+                    card.style.cursor = 'pointer';
+                }
+            });
+        }
+
+        // Check for referral on page load
+        function checkReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralCode = urlParams.get('ref');
+            
+            if (referralCode && referralCode !== userData.referralCode) {
+                // Find referrer and add point
+                const allUsers = Object.keys(localStorage).filter(key => key.startsWith('user_'));
+                for (let userKey of allUsers) {
+                    const user = JSON.parse(localStorage.getItem(userKey));
+                    if (user.referralCode === referralCode) {
+                        // Check if this IP hasn't been referred before
+                        if (!user.referrals.includes(userData.ip)) {
+                            user.referralCount++;
+                            user.balance++;
+                            user.referrals.push(userData.ip);
+                            localStorage.setItem(userKey, JSON.stringify(user));
+                            
+                            alert('🎉 Welcome! You were referred by a friend. They earned 1 point!');
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
