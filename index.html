@@ -607,30 +607,70 @@
                 return;
             }
 
-            // Create TON payment link
-            const tonLink = `ton://transfer/${TON_ADDRESS}?amount=${price * 1000000000}&text=Purchase_${productId}`;
+            // Create multiple TON payment links for different scenarios
+            const amount = Math.floor(price * 1000000000); // Convert to nanoTON
+            const comment = `Purchase_${productId}_${Date.now()}`;
             
-            // Try to open TON wallet
+            // Different methods to open TON wallet directly
+            const tonLinks = [
+                `ton://transfer/${TON_ADDRESS}?amount=${amount}&text=${comment}`,
+                `https://app.tonkeeper.com/transfer/${TON_ADDRESS}?amount=${amount}&text=${comment}`,
+                `https://wallet.ton.org/transfer?to=${TON_ADDRESS}&amount=${amount}&text=${comment}`,
+                `tonkeeper://transfer/${TON_ADDRESS}?amount=${amount}&text=${comment}`
+            ];
+            
+            // Try to open TON wallet directly
+            let opened = false;
+            
+            // Method 1: Try ton:// protocol
             try {
-                window.open(tonLink, '_blank');
-                
-                // Simulate purchase completion (in real app, you'd verify payment)
-                setTimeout(() => {
-                    currentCount--;
-                    countElement.textContent = currentCount;
-                    showModal('Purchase Successful!', `Your ${productId} has been purchased successfully!`);
-                    
-                    if (currentCount <= 0) {
-                        const buyBtn = event.target;
-                        buyBtn.textContent = 'Sold Out';
-                        buyBtn.disabled = true;
-                    }
-                }, 2000);
-                
+                window.location.href = tonLinks[0];
+                opened = true;
             } catch (error) {
-                // Fallback: show payment details
-                showModal('Payment Required', `Please send ${price} TON to:\n${TON_ADDRESS}\nWith memo: Purchase_${productId}`);
+                console.log('TON protocol failed, trying alternatives...');
             }
+            
+            // Method 2: Try Tonkeeper deep link
+            if (!opened) {
+                try {
+                    setTimeout(() => {
+                        window.location.href = tonLinks[3];
+                    }, 100);
+                    opened = true;
+                } catch (error) {
+                    console.log('Tonkeeper deep link failed...');
+                }
+            }
+            
+            // Method 3: Try opening in new window
+            if (!opened) {
+                try {
+                    const newWindow = window.open(tonLinks[1], '_blank');
+                    if (!newWindow) {
+                        // If popup blocked, try direct redirect
+                        window.location.href = tonLinks[1];
+                    }
+                    opened = true;
+                } catch (error) {
+                    console.log('Window open failed...');
+                }
+            }
+            
+            // Show success message immediately
+            showModal('Opening TON Wallet...', `Redirecting to TON app to pay ${price} TON for ${productId}`);
+            
+            // Simulate purchase completion (in real app, you'd verify payment)
+            setTimeout(() => {
+                currentCount--;
+                countElement.textContent = currentCount;
+                showModal('Payment Initiated!', `TON wallet opened. Complete the payment to receive your ${productId}!`);
+                
+                if (currentCount <= 0) {
+                    const buyBtn = event.target;
+                    buyBtn.textContent = 'Sold Out';
+                    buyBtn.disabled = true;
+                }
+            }, 1500);
         }
 
         // Complete task
